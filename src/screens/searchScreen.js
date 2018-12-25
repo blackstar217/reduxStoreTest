@@ -71,7 +71,7 @@ class SearchScreen extends Component {
           onChangeText={text => this.searchFilterFunction(text)}
         />
 
-        <TouchableOpacity onPress={this.props.onSearch}>
+        <TouchableOpacity onPress={this.props.onSearch} style={styles.searchButton}>
           <Text>Search</Text>
         </TouchableOpacity>
         {this.props.renderResults
@@ -92,9 +92,9 @@ class SearchScreen extends Component {
   _renderItemSeparator = () => (
     <View style={{ height: 1, width: '100%', backgroundColor: '#333' }}/>
   )
-  
+
   render() {
-    const data = this.state.filterText === '' 
+    const data = this.state.filterText === ''
       ? this.state.posts
       : this.state.filteredPosts
     if (this.state.loading) {
@@ -110,7 +110,7 @@ class SearchScreen extends Component {
       <FlatList
         data={data}
         renderItem={this._renderItem}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(item, index) => index.toString()}
         ListHeaderComponent={this.renderHeader}
         ItemSeparatorComponent={this._renderItemSeparator}
       />
@@ -132,7 +132,7 @@ const styles = {
   },
   inputContainer: {
     borderBottomWidth: 0,
-    width: "80%",
+    width: "75%",
     backgroundColor: "#dcdce1",
     borderRadius: 9,
     height: 36,
@@ -153,6 +153,9 @@ const styles = {
   },
   text: {
     marginHorizontal: 15,
+  },
+  searchButton: {
+    justifyContent: 'center'
   }
 };
 

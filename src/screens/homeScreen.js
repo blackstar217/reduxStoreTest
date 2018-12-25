@@ -14,27 +14,30 @@ class HomeScreen extends Component {
 
   componentDidMount () {
     const props = this.props;
-    this.setState({ 
-      posts: props.posts, 
-      filteredPosts: props.filteredPosts 
+    this.setState({
+      posts: props.posts,
+      filteredPosts: props.filteredPosts
     });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.state.filteredPosts !== nextProps.filteredPosts) {
-      this.setState({ 
+      this.setState({
         filteredPosts: nextProps.filteredPosts
       })
     }
   }
-  
+
   onPostShow = post => {
     alert(JSON.stringify(post));
     // this.props.navigation.navigate("PostShow", { post });
   };
 
   render() {
-    var posts = this.state.filteredPosts.map(post => {
+    const data = this.state.filteredPosts.length === 0
+      ? this.state.posts
+      : this.state.filteredPosts
+    const posts = data.map(post => {
       return (
         <View key={post.id} style={styles.itemContainer}>
           <Text style={styles.text} onPress={() => this.onPostShow(post)}>{post.title}</Text>
