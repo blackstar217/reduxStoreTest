@@ -42,7 +42,6 @@ class SearchScreen extends Component {
       })
     }
     if (this.props.filteredPosts !== nextProps.filteredPosts) {
-      console.log(nextProps.filteredPosts)
       this.setState({
         loading: false,
         filteredPosts: nextProps.filteredPosts
@@ -57,7 +56,6 @@ class SearchScreen extends Component {
       const textData = text.toLowerCase();
       return postData.indexOf(textData) > -1;
     });
-    console.log(filteredPosts)
     this.props.setFilteredPosts(filteredPosts);
   };
 
