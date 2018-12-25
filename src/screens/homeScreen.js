@@ -1,65 +1,71 @@
 import React, { Component } from "react";
 import { View, Text, AsyncStorage, ScrollView } from "react-native";
-import axios from "axios";
-
-const AUTH_TOKEN = "auth_token";
+import { connect } from 'react-redux'
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      //isLogged: "",
-      //showProgress: false,
-      authToken: "",
       posts: [],
-      page: 1,
-      pages: 0
+      filteredPosts: []
     };
   }
 
-  componentDidMount() {
-    // this.getToken();
-    axios
-      .get("https://rankss.herokuapp.com/posts")
-      .then(response => this.setState({ posts: response.data.posts }));
+  componentDidMount () {
+    const props = this.props;
+    this.setState({ 
+      posts: props.posts, 
+      filteredPosts: props.filteredPosts 
+    });
   }
 
-  async getToken() {
-    try {
-      let authToken = await AsyncStorage.getItem(AUTH_TOKEN);
-      if (!authToken) {
-        this.props.navigation.navigate("Logout");
-      } else {
-        this.setState({ authToken: authToken });
-        //this.setState({ isLogged: true });
-      }
-    } catch (error) {
-      console.log("Something went wrong");
-      this.props.navigation.navigate("Logout");
+  componentWillReceiveProps(nextProps) {
+    if (this.state.filteredPosts !== nextProps.filteredPosts) {
+      this.setState({ 
+        filteredPosts: nextProps.filteredPosts
+      })
     }
   }
-
+  
   onPostShow = post => {
-    this.props.navigation.navigate("PostShow", { post });
+    alert(JSON.stringify(post));
+    // this.props.navigation.navigate("PostShow", { post });
   };
 
   render() {
-    const { navigate } = this.props.navigation;
-    var posts = this.state.posts.map(post => {
+    var posts = this.state.filteredPosts.map(post => {
       return (
-        <View key={post.id}>
-          <Text onPress={() => this.onPostShow(post)}>{post.title}</Text>
+        <View key={post.id} style={styles.itemContainer}>
+          <Text style={styles.text} onPress={() => this.onPostShow(post)}>{post.title}</Text>
         </View>
       );
     });
 
     return (
-      <Card>
-        <ScrollView>{posts}</ScrollView>
-      </Card>
+      <ScrollView>{posts}</ScrollView>
     );
   }
 }
 
-export default HomeScreen;
+const styles = {
+  itemContainer: {
+    width: '100%',
+    height: 50,
+    marginTop: 10,
+    justifyContent: 'center'
+  },
+  text: {
+    marginHorizontal: 15,
+  }
+};
+
+const mapStateToProps = state => ({
+  posts: state.posts,
+  filteredPosts: state.filteredPosts
+})
+
+const mapDispatchToProps = dispatch => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)

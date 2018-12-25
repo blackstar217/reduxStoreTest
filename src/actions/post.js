@@ -7,11 +7,18 @@ export const getPosts = auth_token => dispatch => (
   })
     .then(data => {
       dispatch({
-        type: types.LOAD_MAGAZINE,
-        posts: data.results
+        type: types.LOAD_POSTS,
+        posts: data.posts
       })
     })
     .catch((err) => {
       console.log(err)
     })
+)
+
+export const setFilteredPosts = posts => dispatch => (
+  dispatch({
+    type: types.FILTERED_POST,
+    filteredPosts: posts
+  })
 )
